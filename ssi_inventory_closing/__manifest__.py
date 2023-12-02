@@ -17,6 +17,7 @@
         "ssi_transaction_done_mixin",
         "ssi_transaction_cancel_mixin",
         "ssi_transaction_date_duration_mixin",
+        "ssi_m2o_configurator_mixin",
     ],
     "data": [
         "security/ir_module_category_data.xml",
