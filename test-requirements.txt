@@ -1,0 +1,8 @@
+git+https://github.com/open-synergy/ssi-stock@14.0#subdirectory=setup/ssi_stock_account
+git+https://github.com/open-synergy/ssi-mixin@14.0#subdirectory=setup/ssi_master_data_mixin
+git+https://github.com/open-synergy/ssi-mixin@14.0#subdirectory=setup/ssi_transaction_mixin
+git+https://github.com/open-synergy/ssi-mixin@14.0#subdirectory=setup/ssi_transaction_cancel_mixin
+git+https://github.com/open-synergy/ssi-mixin@14.0#subdirectory=setup/ssi_transaction_confirm_mixin
+git+https://github.com/open-synergy/ssi-mixin@14.0#subdirectory=setup/ssi_transaction_done_mixin
+git+https://github.com/open-synergy/ssi-mixin@14.0#subdirectory=setup/ssi_m2o_configurator_mixin
+git+https://github.com/open-synergy/ssi-product-attribute@14.0#subdirectory=setup/ssi_product
