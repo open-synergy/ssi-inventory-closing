@@ -94,9 +94,9 @@
 <menuitem
         id="inventory_closing_menu"
         name="Inventory Closings"
-        parent="stock.menu_stock_root"
+        parent="stock.menu_stock_warehouse_mgmt"
         action="inventory_closing_action"
         groups="inventory_closing_viewer_group"
-        sequence="3"
+        sequence="90"
     />
 </odoo>
