@@ -33,10 +33,16 @@
     <field name="inherit_id" ref="ssi_master_data_mixin.mixin_master_data_view_form" />
     <field name="arch" type="xml">
         <data>
+
             <xpath expr="//page[last()]" position="before">
                 <page name="product" string="Product">
                 </page>
                 <page name="inventory" string="Inventory">
+                </page>
+                <page name="accounting" string="Accounting">
+                    <group name="accounting_1" colspan="4" col="2">
+                        <field name="journal_id" />
+                    </group>
                 </page>
             </xpath>
         </data>

@@ -45,3 +45,8 @@ class InventoryClosingType(models.Model):
         column1="inventory_closing_type_id",
         column2="product_category_id",
     )
+    journal_id = fields.Many2one(
+        string="Journal",
+        comodel_name="account.journal",
+        required=True,
+    )
