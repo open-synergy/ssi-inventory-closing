@@ -76,6 +76,14 @@ class InventoryClosing(models.Model):
         readonly=True,
         states={"draft": [("readonly", False)]},
     )
+    journal_id = fields.Many2one(
+        string="Journal",
+        comodel_name="account.journal",
+        required=True,
+        ondelete="restrict",
+        readonly=True,
+        states={"draft": [("readonly", False)]},
+    )
     stock_valuation_layer_ids = fields.One2many(
         string="Stock Valuation Layers",
         comodel_name="stock.valuation.layer",
@@ -188,6 +196,14 @@ class InventoryClosing(models.Model):
                 )
             record.allowed_picking_type_category_ids = result
 
+    @api.onchange(
+        "type_id",
+    )
+    def onchange_journal_id(self):
+        self.journal_id = False
+        if self.type_id:
+            self.journal_id = self.type_id.journal_id
+
     def action_reload_stock_move(self):
         for record in self.sudo():
             record._reload_stock_move()
@@ -269,7 +285,18 @@ class InventoryClosing(models.Model):
         return res
 
     @ssi_decorator.post_done_action()
-    def _01_create_aml_from_svl(self):
+    def _01_update_svl_journal(self):
+        self.ensure_one()
+        for move in self.stock_move_ids:
+            if not move.journal_id:
+                move.picking_id.write(
+                    {
+                        "journal_id": self.journal_id.id,
+                    }
+                )
+
+    @ssi_decorator.post_done_action()
+    def _02_create_aml_from_svl(self):
         self.ensure_one()
         for svl in self.stock_valuation_layer_ids:
             svl._create_accounting_entry()

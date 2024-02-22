@@ -81,6 +81,11 @@
             <page name="account_move" string="Accounting Entries">
                 <field name="account_move_ids" />
             </page>
+            <page name="accounting" string="Accounting">
+                <group name="accounting_1" colspan="4" col="2">
+                    <field name="journal_id" />
+                </group>
+            </page>
         </xpath>
     </field>
 </record>
