@@ -18,7 +18,7 @@ Available addons
 ----------------
 addon | version | maintainers | summary
 --- | --- | --- | ---
-[ssi_inventory_closing](ssi_inventory_closing/) | 14.0.1.1.0 |  | Inventory Closing
+[ssi_inventory_closing](ssi_inventory_closing/) | 14.0.1.2.0 |  | Inventory Closing
 
 [//]: # (end addons)
 
