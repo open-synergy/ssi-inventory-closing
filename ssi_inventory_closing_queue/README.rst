@@ -2,9 +2,9 @@
    :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
    :alt: License: AGPL-3
 
-=================
-Inventory Closing
-=================
+=======================
+Inventory Closing Queue
+=======================
 
 
 Installation
@@ -34,7 +34,7 @@ Credits
 Contributors
 ------------
 
-* Usamah <usa8bit@gmail.com>
+* Miftahussalam <miftahussalam08@gmail.com>
 
 Maintainer
 ----------
