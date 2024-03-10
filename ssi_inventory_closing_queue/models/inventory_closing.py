@@ -35,7 +35,6 @@ class InventoryClosing(models.Model):
     )
 
     def action_queue_job(self):
-        print('\n action_queue_job')
         self.ensure_one()
         self.write(self._prepare_done_data())
         self._run_post_done_check()
