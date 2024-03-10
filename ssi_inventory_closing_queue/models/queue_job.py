@@ -17,3 +17,17 @@ class QueueJob(models.Model):
                 'job_id': res.id
             })
         return res
+
+    def write(self, vals):
+        res = super().write(vals)
+        for rec in self:
+            if vals.get('state') in ['cancelled', 'failed'] and rec.model_name == 'inventory_closing':
+                for closing_id in rec.records.filtered(lambda c: c.state == 'confirm'):
+                    sorted_approval_ids = closing_id.approval_ids.sorted(key='date', reverse=True)
+                    last_approval_id = sorted_approval_ids[:1]
+                    last_approval_id.write({
+                        'status': 'pending',
+                        'user_id': False,
+                        'date': False,
+                    })
+        return res

@@ -12,6 +12,7 @@
             <xpath expr="//field[@name='journal_id']" position="after">
                 <field name="job_id" readonly="1"/>
                 <field name="job_state"/>
+                <field name="job_result"/>
             </xpath>
         </data>
     </field>
