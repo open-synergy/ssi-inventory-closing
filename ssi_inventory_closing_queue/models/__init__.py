@@ -4,4 +4,5 @@
 
 from . import (
     inventory_closing,
+    queue_job,
 )
