@@ -9,25 +9,19 @@ from odoo import fields, models, api
 class QueueJob(models.Model):
     _inherit = "queue.job"
 
-    @api.model
-    def create(self, values):
-        res = super(QueueJob, self).create(values)
-        if res.model_name == 'inventory_closing':
-            res.records.write({
-                'job_id': res.id
-            })
-        return res
-
     def write(self, vals):
-        res = super().write(vals)
+        res = super(QueueJob, self).write(vals)
         for rec in self:
             if vals.get('state') in ['cancelled', 'failed'] and rec.model_name == 'inventory_closing':
-                for closing_id in rec.records.filtered(lambda c: c.state == 'confirm'):
+                for closing_id in rec.records.filtered(lambda c: c.state == 'done'):
                     sorted_approval_ids = closing_id.approval_ids.sorted(key='date', reverse=True)
                     last_approval_id = sorted_approval_ids[:1]
                     last_approval_id.write({
                         'status': 'pending',
                         'user_id': False,
                         'date': False,
+                    })
+                    closing_id.write({
+                        "state": closing_id._approval_state,
                     })
         return res

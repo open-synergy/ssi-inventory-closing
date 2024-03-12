@@ -3,8 +3,10 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 
-from odoo import fields, models, api
+from odoo import fields, models, api, _
 from odoo.exceptions import ValidationError
+
+from odoo.addons.ssi_decorator import ssi_decorator
 
 
 class InventoryClosing(models.Model):
@@ -34,14 +36,18 @@ class InventoryClosing(models.Model):
         store=False
     )
 
-    def action_queue_job(self):
-        self.ensure_one()
-        self.write(self._prepare_done_data())
-        self._run_post_done_check()
-        self._run_post_done_action()
-
-    def action_done(self):
-        for record in self.sudo():
-            record._run_pre_done_check()
-            record._run_pre_done_action()
-            record.with_delay().action_queue_job()
+    @ssi_decorator.post_done_action()
+    def _02_create_aml_from_svl(self):
+        _super = super(InventoryClosing, self)
+        if self.env.context.get('job_uuid'):
+            _super._02_create_aml_from_svl()
+        else:
+            description = "Create job queue for %s" % self.name
+            job = self.with_delay(description=_(description))._02_create_aml_from_svl()
+            queue_job_obj = self.env["queue.job"]
+            criteria = [("uuid", "=", job.uuid)]
+            self.write(
+                {
+                    "job_id": queue_job_obj.search(criteria, limit=1, order='id desc').id,
+                }
+            )
