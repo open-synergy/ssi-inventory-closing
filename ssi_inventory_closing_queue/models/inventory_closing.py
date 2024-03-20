@@ -22,16 +22,16 @@ class InventoryClosing(models.Model):
 
     job_id = fields.Many2one(
         comodel_name="queue.job",
-        string="Queue Job",
+        string="Job",
         copy=False,
     )
     job_state = fields.Selection(
-        string="Queue Job Status",
+        string="Status",
         related="job_id.state",
         store=True
     )
     job_result = fields.Text(
-        string="Queue Job Result",
+        string="Result",
         compute="_get_job_result",
         store=False
     )
@@ -41,13 +41,21 @@ class InventoryClosing(models.Model):
         _super = super(InventoryClosing, self)
         if self.env.context.get('job_uuid'):
             _super._02_create_aml_from_svl()
+            self.write({
+                "state": "done",
+            })
         else:
-            description = "Create job queue for %s" % self.name
-            job = self.with_delay(description=_(description))._02_create_aml_from_svl()
-            queue_job_obj = self.env["queue.job"]
-            criteria = [("uuid", "=", job.uuid)]
-            self.write(
-                {
-                    "job_id": queue_job_obj.search(criteria, limit=1, order='id desc').id,
-                }
-            )
+            update_vals = {
+                "state": self._approval_state
+            }
+            if self.job_id:
+                self.job_id.requeue()
+            else:
+                description = "Create job queue for %s" % self.name
+                job = self.with_delay(description=_(description))._02_create_aml_from_svl()
+                queue_job_obj = self.env["queue.job"]
+                criteria = [("uuid", "=", job.uuid)]
+                update_vals.update({
+                    "job_id": queue_job_obj.search(criteria, limit=1, order="id desc").id,
+                })
+            self.write(update_vals)

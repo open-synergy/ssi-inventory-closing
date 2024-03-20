@@ -9,10 +9,12 @@
     <field name="inherit_id" ref="ssi_inventory_closing.inventory_closing_view_form" />
     <field name="arch" type="xml">
         <data>
-            <xpath expr="//field[@name='journal_id']" position="after">
-                <field name="job_id" readonly="1"/>
-                <field name="job_state"/>
-                <field name="job_result"/>
+            <xpath expr="//group[@name='accounting_1']" position="after">
+                <group name="accounting_2" colspan="4" col="2" groups="base.group_no_one" string="Queue Job">
+                    <field name="job_id" readonly="1"/>
+                    <field name="job_state"/>
+                    <field name="job_result"/>
+                </group>
             </xpath>
         </data>
     </field>
