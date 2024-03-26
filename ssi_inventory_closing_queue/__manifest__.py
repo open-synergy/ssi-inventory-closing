@@ -12,6 +12,7 @@
     "depends": [
         "queue_job_batch",
         "ssi_inventory_closing",
+        "base_automation",
     ],
     "data": [
         "security/ir.model.access.csv",
