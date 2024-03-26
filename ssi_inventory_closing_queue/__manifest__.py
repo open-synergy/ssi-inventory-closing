@@ -10,11 +10,17 @@
     "license": "AGPL-3",
     "installable": True,
     "depends": [
-        "queue_job",
+        "queue_job_batch",
         "ssi_inventory_closing",
     ],
     "data": [
+        "security/ir.model.access.csv",
+        "data/ir_actions_server_data.xml",
+        "data/base_automation_data.xml",
+        "data/policy_template_data.xml",
         "views/inventory_closing_views.xml",
+        "views/inventory_closing_type_views.xml",
+        "views/stock_valuation_layer_views.xml",
     ],
     "demo": [],
     "images": [],

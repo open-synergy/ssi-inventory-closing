@@ -35,6 +35,7 @@ Contributors
 ------------
 
 * Miftahussalam <miftahussalam08@gmail.com>
+* Michael Viriyananda <viriyananda.michael@gmail.com>
 
 Maintainer
 ----------
