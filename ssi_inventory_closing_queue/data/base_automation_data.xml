@@ -6,8 +6,12 @@
 <record id="inventory_closing_done" model="base.automation">
     <field name="action_server_id" ref="inventory_closing_action_done" />
     <field name="trigger">on_write</field>
-    <field name="filter_pre_domain">[('state','=','confirm'), ('all_job_finished','=',False)]</field>
-    <field name="filter_domain">[('state','=','confirm'), ('all_job_finished','=',True)]</field>
+    <field
+                name="filter_pre_domain"
+            >[('state','=','confirm'), ('all_job_finished','=',False)]</field>
+    <field
+                name="filter_domain"
+            >[('state','=','confirm'), ('all_job_finished','=',True)]</field>
 </record>
 </data>
 </odoo>

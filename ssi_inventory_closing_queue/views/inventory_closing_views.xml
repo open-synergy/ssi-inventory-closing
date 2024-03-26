@@ -10,7 +10,11 @@
     <field name="arch" type="xml">
         <data>
             <xpath expr="//page[last()]" position="after">
-                <page name="queue_job_batch" string="Queue Job Batch(s)" groups="ssi_inventory_closing.inventory_closing_validator_group">
+                <page
+                        name="queue_job_batch"
+                        string="Queue Job Batch(s)"
+                        groups="ssi_inventory_closing.inventory_closing_validator_group"
+                    >
                     <button
                             name="action_requeue"
                             string="Requeue"
@@ -20,19 +24,19 @@
                             attrs="{'invisible':[('all_job_finished','=',True)]}"
                         />
                     <group name="group_1" colspan="4" col="2">
-                        <field name="all_job_finished"/>
+                        <field name="all_job_finished" />
                     </group>
                     <field name="queue_job_batch_ids" colspan="4" nolabel="1">
                         <tree string="Job Batches" create="false" delete="false">
-                            <field name="job_batch_id"/>
+                            <field name="job_batch_id" />
                             <field name="job_count" invisible="1" />
                             <field
-                                name="finished_job_count"
-                                widget="progressbar"
-                                string="Completeness"
-                                options="{'current_value': 'finished_job_count', 'max_value': 'job_count'}"
-                            />
-                            <field name="job_batch_state"/>
+                                    name="finished_job_count"
+                                    widget="progressbar"
+                                    string="Completeness"
+                                    options="{'current_value': 'finished_job_count', 'max_value': 'job_count'}"
+                                />
+                            <field name="job_batch_state" />
                         </tree>
                     </field>
                 </page>

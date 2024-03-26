@@ -2,9 +2,7 @@
 # Copyright 2022 PT. Simetri Sinergi Indonesia
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 # pylint: disable=W0622
-from odoo import _, api, fields, models
-from odoo.exceptions import UserError
-from odoo.tools.safe_eval import safe_eval
+from odoo import api, fields, models
 
 
 class InventoryClosingQueueJobBatch(models.Model):
@@ -40,7 +38,5 @@ class InventoryClosingQueueJobBatch(models.Model):
         related="job_batch_id.finished_job_count",
     )
     job_batch_state = fields.Selection(
-        string="Status",
-        related="job_batch_id.state",
-        store=True
+        string="Status", related="job_batch_id.state", store=True
     )
