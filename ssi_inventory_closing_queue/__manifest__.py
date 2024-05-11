@@ -12,16 +12,13 @@
     "depends": [
         "queue_job_batch",
         "ssi_inventory_closing",
+        "ssi_transaction_queue_done_mixin",
+        "ssi_transaction_queue_cancel_mixin",
         "base_automation",
     ],
     "data": [
-        "security/ir.model.access.csv",
         "data/ir_actions_server_data.xml",
         "data/base_automation_data.xml",
-        "data/policy_template_data.xml",
-        "views/inventory_closing_views.xml",
-        "views/inventory_closing_type_views.xml",
-        "views/stock_valuation_layer_views.xml",
     ],
     "demo": [],
     "images": [],
