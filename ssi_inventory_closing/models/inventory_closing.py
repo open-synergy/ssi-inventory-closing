@@ -2,7 +2,10 @@
 # Copyright 2023 PT. Simetri Sinergi Indonesia
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
+import pytz
+
 from odoo import api, fields, models
+from datetime import datetime
 
 from odoo.addons.ssi_decorator import ssi_decorator
 
@@ -244,8 +247,14 @@ class InventoryClosing(models.Model):
 
     def _prepare_stock_move_domain(self):
         self.ensure_one()
-        date_start = fields.Datetime.to_datetime(self.date_start)
-        date_end = fields.Datetime.to_datetime(self.date_end)
+        date_start = fields.Datetime.to_datetime(self.date_start).strftime("%Y-%m-%d %H:%M:%S")
+        date_end = fields.Datetime.to_datetime(self.date_end).strftime("%Y-%m-%d 23:59:59")
+        date_start = datetime.strptime(date_start, "%Y-%m-%d %H:%M:%S")
+        date_end = datetime.strptime(date_end, "%Y-%m-%d %H:%M:%S")
+        date_start = pytz.UTC.localize(date_start).astimezone(pytz.timezone(
+            self.company_id.partner_id.tz or "Asia/Jakarta")).strftime("%Y-%m-%d %H:%M:%S")
+        date_end = pytz.UTC.localize(date_end).astimezone(pytz.timezone(
+            self.company_id.partner_id.tz or "Asia/Jakarta")).strftime("%Y-%m-%d %H:%M:%S")
         return [
             "&",
             "&",
