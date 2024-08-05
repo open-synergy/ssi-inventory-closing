@@ -2,10 +2,11 @@
 # Copyright 2023 PT. Simetri Sinergi Indonesia
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
+from datetime import datetime, time
+
 import pytz
 
 from odoo import api, fields, models
-from datetime import datetime
 
 from odoo.addons.ssi_decorator import ssi_decorator
 
@@ -247,14 +248,23 @@ class InventoryClosing(models.Model):
 
     def _prepare_stock_move_domain(self):
         self.ensure_one()
-        date_start = fields.Datetime.to_datetime(self.date_start).strftime("%Y-%m-%d %H:%M:%S")
-        date_end = fields.Datetime.to_datetime(self.date_end).strftime("%Y-%m-%d 23:59:59")
-        date_start = datetime.strptime(date_start, "%Y-%m-%d %H:%M:%S")
-        date_end = datetime.strptime(date_end, "%Y-%m-%d %H:%M:%S")
-        date_start = pytz.UTC.localize(date_start).astimezone(pytz.timezone(
-            self.company_id.partner_id.tz or "Asia/Jakarta")).strftime("%Y-%m-%d %H:%M:%S")
-        date_end = pytz.UTC.localize(date_end).astimezone(pytz.timezone(
-            self.company_id.partner_id.tz or "Asia/Jakarta")).strftime("%Y-%m-%d %H:%M:%S")
+
+        tz_company = pytz.timezone(self.env.company.partner_id.tz or "UTC")
+        tz_utc = pytz.timezone("UTC")
+        date_start = fields.Date.to_date(self.date_start)
+        date_end = fields.Date.to_date(self.date_end)
+        time_start = time(0, 0, 0)
+        time_end = time(23, 59, 59)
+        datetime_start = (
+            tz_company.localize(datetime.combine(date_start, time_start))
+            .astimezone(tz_utc)
+            .strftime("%Y-%m-%d %H:%M:%S")
+        )
+        datetime_end = (
+            tz_company.localize(datetime.combine(date_end, time_end))
+            .astimezone(tz_utc)
+            .strftime("%Y-%m-%d %H:%M:%S")
+        )
         return [
             "&",
             "&",
@@ -262,8 +272,8 @@ class InventoryClosing(models.Model):
             "&",
             "&",
             ("state", "=", "done"),
-            ("date", ">=", date_start),
-            ("date", "<=", date_end),
+            ("date", ">=", datetime_start),
+            ("date", "<=", datetime_end),
             ("account_move_ids", "=", False),
             "|",
             ("product_id", "in", self.allowed_product_ids.ids),
