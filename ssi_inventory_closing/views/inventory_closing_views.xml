@@ -21,12 +21,41 @@
 <record id="inventory_closing_view_search" model="ir.ui.view">
     <field name="name">inventory_closing - Search</field>
     <field name="model">inventory_closing</field>
+    <field name="mode">primary</field>
     <field
             name="inherit_id"
             ref="ssi_transaction_mixin.mixin_transaction_view_search"
         />
     <field name="arch" type="xml">
-        <data />
+        <data>
+            <xpath expr="//field[@name='user_id']" position="after">
+                <field name="type_id" />
+                <field name="date" />
+                <field name="date_start" />
+                <field name="date_end" />
+            </xpath>
+            <xpath expr="//separator[@name='activity']" position="before">
+                <separator name="date" />
+                <filter
+                        name="dom_today"
+                        string="Today"
+                        domain="[('date', '=', context_today().strftime('%Y-%m-%d'))]"
+                    />
+                <filter
+                        name="dom_this_month"
+                        string="This Month"
+                        domain="[('date', '&gt;=', (context_today()).strftime('%Y-%m-01')), ('date', '&lt;=', context_today().strftime('%Y-%m-%d'))]"
+                    />
+            </xpath>
+            <xpath expr="//group[@name='group_by']" position="inside">
+                <filter
+                        name="grp_type"
+                        string="Type"
+                        context="{'group_by': 'type_id'}"
+                    />
+                <filter name="grp_date" string="Date" context="{'group_by': 'date'}" />
+            </xpath>
+        </data>
     </field>
 </record>
 
