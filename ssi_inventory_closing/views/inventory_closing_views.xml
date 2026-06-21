@@ -53,11 +53,7 @@
                         string="Type"
                         context="{'group_by': 'type_id'}"
                     />
-                <filter
-                        name="grp_date"
-                        string="Date"
-                        context="{'group_by': 'date'}"
-                    />
+                <filter name="grp_date" string="Date" context="{'group_by': 'date'}" />
             </xpath>
         </data>
     </field>
