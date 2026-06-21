@@ -255,6 +255,7 @@ msgstr ""
 
 #. module: ssi_inventory_closing
 #: model:ir.model.fields,field_description:ssi_inventory_closing.field_inventory_closing__date
+#: model_terms:ir.ui.view,arch_db:ssi_inventory_closing.inventory_closing_view_search
 msgid "Date"
 msgstr ""
 
@@ -705,6 +706,16 @@ msgid "Stock Valuation Layers"
 msgstr ""
 
 #. module: ssi_inventory_closing
+#: model_terms:ir.ui.view,arch_db:ssi_inventory_closing.inventory_closing_view_search
+msgid "This Month"
+msgstr ""
+
+#. module: ssi_inventory_closing
+#: model_terms:ir.ui.view,arch_db:ssi_inventory_closing.inventory_closing_view_search
+msgid "Today"
+msgstr ""
+
+#. module: ssi_inventory_closing
 #: model:ir.model.fields,help:ssi_inventory_closing.field_inventory_closing__name
 msgid ""
 "Transaction/document number\n"
@@ -719,6 +730,7 @@ msgstr ""
 
 #. module: ssi_inventory_closing
 #: model:ir.model.fields,field_description:ssi_inventory_closing.field_inventory_closing__type_id
+#: model_terms:ir.ui.view,arch_db:ssi_inventory_closing.inventory_closing_view_search
 msgid "Type"
 msgstr ""
 
