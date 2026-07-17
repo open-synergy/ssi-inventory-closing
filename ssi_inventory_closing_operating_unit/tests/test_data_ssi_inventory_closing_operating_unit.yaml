@@ -1,0 +1,115 @@
+scenarios:
+  - name: "Inventory Closing - Operating Unit propagation"
+    steps:
+      - step: "Setup - find general journal"
+        action: "search"
+        model: "account.journal"
+        domain:
+          - ["type", "=", "general"]
+        save_as: "journal"
+        limit: 1
+
+      - step: "Setup - create inventory closing type"
+        action: "create"
+        model: "inventory_closing_type"
+        save_as: "closing_type"
+        values:
+          name: "Test Closing Type IC OU 1"
+          code: "TICOU1"
+          journal_id: "REC: journal.id"
+          product_selection_method: "manual"
+          product_category_selection_method: "manual"
+          picking_type_selection_method: "manual"
+          picking_type_category_selection_method: "manual"
+
+      - step: "Create inventory_closing with operating_unit_id"
+        action: "create"
+        model: "inventory_closing"
+        save_as: "closing"
+        as_user: "base.user_admin"
+        values:
+          type_id: "REC: closing_type.id"
+          journal_id: "REC: journal.id"
+          date: "2024-01-31"
+          date_start: "2024-01-01"
+          date_end: "2024-01-31"
+          operating_unit_id: "REF: operating_unit.main_operating_unit"
+
+      - step: "Assert inventory_closing operating_unit_id is set"
+        action: "assert"
+        target: "closing"
+        asserts:
+          operating_unit_id:
+            type: "value"
+            operator: "is_truthy"
+
+  - name: "Inventory Closing - ir.rule restricts access by operating unit"
+    steps:
+      - step: "Setup - find general journal"
+        action: "search"
+        model: "account.journal"
+        domain:
+          - ["type", "=", "general"]
+        save_as: "journal"
+        limit: 1
+
+      - step: "Setup - create inventory closing type"
+        action: "create"
+        model: "inventory_closing_type"
+        save_as: "closing_type"
+        values:
+          name: "Test Closing Type IC OU 2"
+          code: "TICOU2"
+          journal_id: "REC: journal.id"
+          product_selection_method: "manual"
+          product_category_selection_method: "manual"
+          picking_type_selection_method: "manual"
+          picking_type_category_selection_method: "manual"
+
+      - step: "Create inventory_closing with main operating unit"
+        action: "create"
+        model: "inventory_closing"
+        save_as: "closing"
+        as_user: "base.user_admin"
+        values:
+          type_id: "REC: closing_type.id"
+          journal_id: "REC: journal.id"
+          date: "2024-02-29"
+          date_start: "2024-02-01"
+          date_end: "2024-02-29"
+          operating_unit_id: "REF: operating_unit.main_operating_unit"
+
+      - step: "Create user restricted to a different operating unit"
+        action: "create"
+        model: "res.users"
+        save_as: "restricted_user"
+        values:
+          name: "Restricted Inventory Closing OU User"
+          login: "restricted_inventory_closing_ou_user@example.com"
+          groups_id:
+            - - 6
+              - 0
+              - - "REF: base.group_user"
+                - "REF: ssi_inventory_closing.inventory_closing_user_group"
+                - "REF: ssi_inventory_closing_operating_unit.inventory_closing_ou_group"
+          assigned_operating_unit_ids:
+            - - 6
+              - 0
+              - - "REF: operating_unit.b2b_operating_unit"
+
+      - step: "Restricted user cannot see the record"
+        action: "search"
+        model: "inventory_closing"
+        domain: [["id", "=", "REC: closing.id"]]
+        save_as: "search_result"
+        as_user: "restricted_user"
+        expect_count: 0
+
+      - step: "Restricted user cannot write the record"
+        action: "write"
+        target: "closing"
+        as_user: "restricted_user"
+        expect_error:
+          type: "AccessError"
+        values:
+          type_id: "REC: closing_type.id"
